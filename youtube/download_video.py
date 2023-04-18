@@ -5,11 +5,14 @@ from unidecode import unidecode
 
 
 def get_videos(url_list: list[str]) -> list[YouTube]:
+     if not url_list:
+         raise ValueError("List of url is empty")
+     
      return [YouTube(url=link) for link in url_list]
     
 
-def save_video_in_path(path: str) -> Path:
-    dest_path: Path = Path(f"{Path.cwd()}{path}").resolve()
+def save_video_in_path(path: str | Path = "downloads") -> Path:
+    dest_path: Path = Path(Path.cwd()/path).resolve()
 
     if not dest_path.is_dir():
          dest_path.mkdir(parents=True)
@@ -32,17 +35,16 @@ def clean_file_name(name_video: str) -> str:
     
 
 
-def get_file_names(video_list: list[YouTube]) -> list[YouTube]:
-    return [f"{clean_file_name(video.title)}.mp4" for video in video_list]
+def get_file_names(video_list: list[YouTube], extension: str = ".mp4") -> list[YouTube]:
+    return [f"{clean_file_name(video.title)}{extension}" for video in video_list]
 
 
 def get_file_paths(save_path: Path, file_names: list[str]) -> list[Path]:
     return [save_path/file_name for file_name in file_names]
 
 
-def existing_video(
-                   file_paths: list[Path],
-                   file_names: list[str]) -> list[str] | str:
+def existing_video(file_paths: list[Path],
+                   file_names: list[str]) -> list[str]:
 
 
     messages: list[str] = [f"Video with the title: {video_file_name} exist" if file_path.exists() 
@@ -60,7 +62,7 @@ def existing_video(
 
 
     if not filtered_messages:
-        return "Downloading new videos..."
+        return ["Downloading new videos..."]
         
     return filtered_messages
 

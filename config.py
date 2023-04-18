@@ -7,5 +7,3 @@ def load_config() -> dict:
     return {"openai_api_key": os.getenv("OPENAI_API_KEY")}
 
 
-
-
