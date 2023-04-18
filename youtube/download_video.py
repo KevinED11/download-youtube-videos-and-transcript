@@ -1,6 +1,8 @@
+from pathlib import Path
+
+
 from pytube import YouTube
 from pytube.exceptions import PytubeError
-from pathlib import Path
 from unidecode import unidecode
 
 
